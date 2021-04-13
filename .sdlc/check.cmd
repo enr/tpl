@@ -56,3 +56,4 @@ for /f %%x in ('dir /AD /B /S cmd') do (
 
 cd %project_dir%
 go test -mod vendor -v github.com/enr/tpl/e2e
+

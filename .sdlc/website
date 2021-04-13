@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -e
+
+tool_source="${BASH_SOURCE[0]}"
+while [ -h "$tool_source" ] ; do tool_source="$(readlink "$tool_source")"; done
+project_scripts_dir="$( cd -P "$( dirname "$tool_source" )" && pwd )"
+project_home="$( cd -P "$( dirname "$project_scripts_dir" )" && pwd )"
+
+source "${project_scripts_dir}/config"
+
+git_hash_short="$(git rev-parse --short HEAD)"
+echo "Building ${REPO_NAME} website for version: ${APP_VERSION} ${git_hash_short}"
+
+docs_dir="${project_home}/docs"
+cd "$docs_dir"
+
+website_build_dir="${project_home}/public"
+mkdir -p "$website_build_dir"
+
+cp -r "$docs_dir" /documents
+
+# Asciidoctor attributes
+downloads_url="https://bintray.com/${BINTRAY_USER}/${BINTRAY_REPO}/${REPO_NAME}/${APP_VERSION}#files"
+ci_ns="${REPO_OWNER}/${REPO_NAME}"
+ci_build_id="$CI_BUILD_ID"
+project_authors="${REPO_NAME} contributors"
+echo "Using attributes ci-ns=${ci_ns} ci-build-id=${ci_build_id} project-authors=${project_authors}"
+
+asciidoctor --doctype book \
+            --attribute "source-highlighter=rouge" \
+            --attribute "project-version=${APP_VERSION}" \
+            --attribute "project-authors=${project_authors}" \
+            --attribute "ci-ns=${ci_ns}" \
+            --attribute "ci-build-id=${ci_build_id}" \
+            --attribute "downloads-url=${downloads_url}" \
+            --destination-dir "$website_build_dir" \
+            index.adoc
+
+asciidoctor-pdf --doctype book \
+                --attribute "source-highlighter=rouge" \
+                --attribute "project-version=${APP_VERSION}" \
+                --attribute "project-authors=${project_authors}" \
+                --attribute "ci-ns=${ci_ns}" \
+                --attribute "ci-build-id=${ci_build_id}" \
+                --destination-dir "${website_build_dir}/pdf" \
+                --out-file="${REPO_NAME}_manual.pdf" \
+                index.adoc

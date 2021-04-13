@@ -1,0 +1,5 @@
+#!-- tpl:{value:TEST} --#
+  
+  #!-- tpl:{file:input.txt} --#
+#!-- tpl:{var:foo} --#
+#!-- tpl:{var:config.hello} --#

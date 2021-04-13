@@ -1,0 +1,5 @@
+aaa
+    bbb
+      #!-- tpl:{file:input.txt} --#
+    ccc
+ddd

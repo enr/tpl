@@ -1,0 +1,10 @@
+aaa
+    bbb
+      fff
+      ooo
+      ooo
+      bbb
+      aaa
+      rrr
+    ccc
+ddd

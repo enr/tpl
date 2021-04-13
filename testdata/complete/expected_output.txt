@@ -1,0 +1,7 @@
+TEST
+  
+  a
+   b
+    c
+bar bar
+go

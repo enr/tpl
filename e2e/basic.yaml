@@ -1,0 +1,60 @@
+preconditions:
+  fs:
+    - file: ../bin/tpl
+      ext:
+        windows: .exe
+specs:
+  # help:
+  #   command:
+  #     working_dir: ..
+  #     exe: bin/tpl
+  #     ext:
+  #       windows: .exe
+  #     args:
+  #       - "--help"
+  #   expectations:
+  #     status:
+  #       equals_to: 0
+  #     output:
+  #       stdout:
+  #         contains_all:
+  #           - NAME
+  #           - USAGE
+  #           - COMMANDS
+  #           - OPTIONS
+  #       stderr:
+  #         is_empty: true
+  version:
+    command:
+      working_dir: ..
+      exe: bin/tpl
+      ext:
+        windows: .exe
+      args:
+        - "--version"
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stdout:
+          contains_all:
+            - tpl version
+            - Revision
+            - Build date
+        stderr:
+          is_empty: true
+  # no-args:
+  #   command:
+  #     working_dir: ..
+  #     exe: bin/tpl
+  #     ext:
+  #       windows: .exe
+  #   expectations:
+  #     status:
+  #       equals_to: 1
+  #     output:
+  #       stdout:
+  #         is_empty: true
+  #       stderr:
+  #         contains_all:
+  #           - No destination set

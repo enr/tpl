@@ -1,0 +1,105 @@
+preconditions:
+  fs:
+    - file: ../bin/tpl
+      ext:
+        windows: .exe
+specs:
+  text:
+    description: Tour of templating
+    command:
+      working_dir: ..
+      cli: bin/tpl -D -s testdata/complete/template.txt -d build/e2e/001.txt -S '#!--' -E '--#' --var 'foo=bar bar' --var config.hello=go
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stderr:
+          is_empty: true
+      fs:
+        - file: ../build/e2e/001.txt
+          text_equals_to: ../testdata/complete/expected_output.txt
+  noindent:
+    description: Verify no-indent flag
+    command:
+      working_dir: ..
+      cli: bin/tpl -D -s testdata/indent/template.txt -d build/e2e/002.txt --no-indent
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stderr:
+          is_empty: true
+      fs:
+        - file: ../build/e2e/002.txt
+          text_equals_to: ../testdata/indent/expected_output_no_indent.txt
+  env:
+    description: Verify environment variable substitution
+    command:
+      working_dir: ..
+      cli: bin/tpl -D -s testdata/env/template.txt -d build/e2e/env.txt
+      env:
+        TPL_TEST_ENV: tpl-test-environment-var
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stderr:
+          is_empty: true
+      fs:
+        - file: ../build/e2e/env.txt
+          text_equals_to: ../testdata/env/expected_output.txt
+  stdout:
+    description: Write to standard out
+    command:
+      working_dir: ..
+      cli: bin/tpl -D -s testdata/hello/template.txt --stdout
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stderr:
+          is_empty: true
+        stdout:
+          equals_to_file: ../testdata/hello/expected_output.txt
+  indent:
+    description: Verify indentation
+    command:
+      working_dir: ..
+      cli: bin/tpl -D -s testdata/indent/template.txt -d build/e2e/003.txt
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stderr:
+          is_empty: true
+      fs:
+        - file: ../build/e2e/003.txt
+          text_equals_to: ../testdata/indent/expected_output_indent.txt
+  js:
+    description: Tpl JS file
+    command:
+      working_dir: ..
+      cli: bin/tpl -s testdata/js/template.js -d build/e2e/js.txt
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stderr:
+          is_empty: true
+      fs:
+        - file: ../build/e2e/js.txt
+          text_equals_to: ../testdata/js/expected_output.js
+  varfile:
+    description: Verify varfile
+    command:
+      working_dir: ..
+      cli: bin/tpl -s testdata/varfile/template.txt -d build/e2e/varfile.txt --var env=foo
+    expectations:
+      status:
+        equals_to: 0
+      output:
+        stderr:
+          is_empty: true
+      fs:
+        - file: ../build/e2e/varfile.txt
+          text_equals_to: ../testdata/varfile/expected_output.txt

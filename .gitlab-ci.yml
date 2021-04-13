@@ -1,0 +1,60 @@
+image: golang:1.15
+
+cache:
+  paths:
+    - /apt-cache
+    - /go/src/github.com
+    - /go/src/golang.org
+    - /go/src/google.golang.org
+    - /go/src/gopkg.in
+
+stages:
+  - test
+  - build
+  - deploy
+
+unit_tests:
+  stage: test
+  before_script:
+    - echo $GOPATH
+    - chmod +x .sdlc/build
+    - chmod +x .sdlc/check
+    - ./.sdlc/build
+  script:
+    - ./.sdlc/check
+
+dist-release:
+  stage: build
+  only:
+    - tags
+  dependencies:
+    - unit_tests
+  before_script:
+    - env
+    - apt-get update -y
+    - apt-get -y install zip curl
+    - chmod +x .sdlc/build-dist
+    #- chmod +x .sdlc/bintray
+  script:
+    - ./.sdlc/build-dist
+    #- ./.sdlc/bintray
+  artifacts:
+    untracked: true
+    paths:
+    - dist/*.zip
+
+pages:
+  stage: deploy
+  only:
+    - tags
+  image: asciidoctor/docker-asciidoctor:1.3.0
+  dependencies:
+    - dist-release
+  before_script:
+    - chmod +x .sdlc/website
+  script:
+    - ./.sdlc/website
+  artifacts:
+    untracked: true
+    paths:
+    - dist/*.zip

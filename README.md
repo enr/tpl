@@ -1,6 +1,10 @@
 
 # Tpl
 
+![CI Linux Mac](https://github.com/enr/tpl/workflows/CI%20Linux%20Mac/badge.svg)
+![CI Windows](https://github.com/enr/tpl/workflows/CI%20Windows/badge.svg)
+[![Download](https://img.shields.io/badge/Download-Last%20release-brightgreen)](https://github.com/enr/tpl/releases/latest)
+
 __Language agnostic template processor__
 
 Command line tool to process templates in a language agnostic way.

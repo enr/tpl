@@ -18,7 +18,7 @@ configuration files up-to-date using data from:
 
 Default settings for placeholder formats and indentation help to have valid input and output files in most cases:
 
-`$ cat testdata/yaml/template.yaml`
+`$ cat template.yaml`
 
 ```yaml
 apiVersion: apps/v1
@@ -40,7 +40,7 @@ spec:
         - containerPort: 80
 ```
 
-`$ cat testdata/yaml/input.yaml`
+`$ cat input.yaml`
 
 ```yaml
 metadata:
@@ -48,7 +48,7 @@ metadata:
     run: my-nginx
 ```
 
-`$ tpl -s testdata/yaml/template.yaml -d output.yaml`
+`$ tpl -s template.yaml -d output.yaml`
 
 `$ cat output.yaml`
 
@@ -91,7 +91,7 @@ Its default placeholders are a proper comment block, this way a template file wi
 ```yaml
 foo:
   test: true
-  #- tpl:{env:TEST} .#
+  #!-- tpl:{env:TEST} --#
   ping: pong
 ```
 
@@ -113,7 +113,6 @@ tpl -D \
     -d /tmp/tpl/test/out.txt \
     -S '#!--' -E '--#' \
     --var foo=hola --var config.hello=ciao
-
 ```
 
 Using `--placeholder-separator` you can set a separator other than `:` for the block `var:property.key`.
@@ -123,7 +122,6 @@ Separator is also configurable in the template as the first non alphanumeric cha
 ```xml
 <foo><!-- tpl:{|file|c:\a\path|c:\default} --></foo>
 ```
-
 
 **Values from env vars**
 
@@ -158,7 +156,6 @@ Run tpl:
 tpl -s template.html \
     -d out.html \
     --var build.hash=da32da4e
-
 ```
 
 Output:
@@ -187,7 +184,6 @@ Values can be loaded from full file contents (path can be absolute or relative t
 bin/tpl -D -s testdata/varfile/template.txt -d build/varfile.txt --var ENV=PROD
 ```
 
-
 **Indentation**
 
 By default, replacement contents are indented, safe for formats where indentation is important, ie yaml.
@@ -196,24 +192,15 @@ Using `--no-indent` this behaviour is blocked.
 
 **Write to standard output**
 
-.............
-
-**Test drive**
-
-See in action:
+Using `--stdout` content will be written to the standard out. Other logs and messages are suppressed.
 
 ```
-tpl -D \
-    -s testdata/complete/template.txt \
-    -d /tmp/tpl/test/out.txt \
-    -S '#!--' -E '--#' \
-    --var foo=hola --var config.hello=ciao
-
-tpl -s testdata/yaml/template.yaml -d output.yaml
+tpl -D -s testdata/hello/template.txt --stdout
 ```
+
 
 ## License
 
 Apache 2.0 - see LICENSE file.
 
-Copyright 2020 tpl contributors
+Copyright 2020-TODAY tpl contributors
